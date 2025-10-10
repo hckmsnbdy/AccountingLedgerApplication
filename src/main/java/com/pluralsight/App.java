@@ -3,7 +3,6 @@ package com.pluralsight;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
@@ -25,13 +24,13 @@ public class App {
                 String cmd = scanner.nextLine().trim().toLowerCase();
 
                 if (cmd.equalsIgnoreCase("D")) {
-                    addDeposit(scanner, transactions);
+                    addDeposit(transactions, scanner);
 
                 } else if (cmd.equalsIgnoreCase("P")) {
                     makePayment(scanner, transactions);
 
                 } else if (cmd.equalsIgnoreCase("L")) {
-                    showLedgerScreen(scanner);
+                    showLedgerScreen(transactions,scanner);
 
                 } else if (cmd.equalsIgnoreCase("X")) {
                     running = false;
@@ -64,7 +63,7 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
-    private static HashMap<String, Transaction> loadTransactions() {
+    public static HashMap<String, Transaction> loadTransactions() {
         HashMap<String,Transaction> transactions = new HashMap<>();
             try {
                 BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
@@ -86,9 +85,9 @@ public class App {
             }
         return transactions;
     }
-    private static void addDeposit(Scanner scanner, HashMap<String, Transaction> transactions) {}
-    private static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){}
-    private static void showLedgerScreen(Scanner scanner) {
+    public static void addDeposit(HashMap<String, Transaction> transactions, Scanner scanner) {}
+    public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){}
+    public static void showLedgerScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
         boolean back = false;
         while (!back) {
             System.out.println();
@@ -120,7 +119,7 @@ public class App {
 //Alternative
             switch (cmd) {
                 case "A":
-                    showAll();
+                    showAll(transactions);
                     break;
                 case "D":
                     deposits();
@@ -140,10 +139,15 @@ public class App {
             }
         }
     }
-    private static void showAll(){}
-    private static void deposits(){}
-    private static void payments(){}
-    private static void showReportsScreen(Scanner scanner) {
+    public static void showAll(HashMap<String, Transaction> transactions) {
+        System.out.println();
+        for (Transaction list : transactions.values()){
+            displayTransaction(list);
+        }
+    }
+    public static void deposits(){}
+    public static void payments(){}
+    public static void showReportsScreen(Scanner scanner) {
 
         boolean back = false;
         while (!back) {
@@ -183,11 +187,14 @@ public class App {
             }
         }
     }
-    private static void monthToDate(Scanner scanner) {}
-    private static void previousMonth(Scanner scanner) {}
-    private static void yearToDate(Scanner scanner) {}
-    private static void previousYear(Scanner scanner) {}
-    private static void searchbyVendor(Scanner scanner) {}
+    public static void monthToDate(Scanner scanner) {}
+    public static void previousMonth(Scanner scanner) {}
+    public static void yearToDate(Scanner scanner) {}
+    public static void previousYear(Scanner scanner) {}
+    public static void searchbyVendor(Scanner scanner) {}
+    public static void displayTransaction(Transaction t) {
+        System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: $%.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
+        );    }
 
 
 
