@@ -3,6 +3,7 @@ package com.pluralsight;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
@@ -21,25 +22,42 @@ public class App {
                 System.out.println("X) Exit");
                 System.out.print("Enter command: ");
 
-                String cmd = scanner.nextLine().trim();
+                String cmd = scanner.nextLine().trim().toLowerCase();
 
-                switch (cmd) {
-                    case "D":
-                        addDeposit(scanner,transactions);
-                        break;
-                    case "P":
-                        makePayment(scanner,transactions);
-                        break;
-                    case "L":
-                        showLedgerScreen(scanner);
-                        break;
-                    case "X":
-                        running = false;
-                        System.out.println("Goodbye!");
-                        break;
-                    default:
-                        System.out.println("Invalid command. Please try again.");
+                if (cmd.equalsIgnoreCase("D")) {
+                    addDeposit(scanner, transactions);
+
+                } else if (cmd.equalsIgnoreCase("P")) {
+                    makePayment(scanner, transactions);
+
+                } else if (cmd.equalsIgnoreCase("L")) {
+                    showLedgerScreen(scanner);
+
+                } else if (cmd.equalsIgnoreCase("X")) {
+                    running = false;
+                    System.out.println("Goodbye!");
+                } else {
+                    System.out.println("Invalid command. Please try again.");
                 }
+
+// Alternative
+//                switch (cmd) {
+//                    case "D":
+//                        addDeposit(scanner,transactions);
+//                        break;
+//                    case "P":
+//                        makePayment(scanner,transactions);
+//                        break;
+//                    case "L":
+//                        showLedgerScreen(scanner);
+//                        break;
+//                    case "X":
+//                        running = false;
+//                        System.out.println("Goodbye!");
+//                        break;
+//                    default:
+//                        System.out.println("Invalid command. Please try again.");
+//                }
             }
         }
         catch (Exception e) {
@@ -79,21 +97,35 @@ public class App {
             System.out.println("D) Deposits");
             System.out.println("P) Payments");
             System.out.println("R) Reports");
-            System.out.println("0) Home");
+            System.out.println("O) Home");
             System.out.print("Enter command: ");
 
-            String cmd = scanner.nextLine().trim();
+            String cmd = scanner.nextLine().toUpperCase().trim();
 
+//            if (cmd.equalsIgnoreCase("A")) {
+//                showAll();
+//            } else if (cmd.equalsIgnoreCase("D")) {
+//                deposits();
+//            } else if (cmd.equalsIgnoreCase("P")) {
+//                payments();
+//            } else if (cmd.equalsIgnoreCase("R")) {
+//                showReportsScreen(scanner);
+//            } else if (cmd.equalsIgnoreCase("0")) {
+//                back = false;
+//                System.out.println("Goodbye!");
+//            } else {
+//                System.out.println("Invalid command. Please try again.");
+//            }
+
+//Alternative
             switch (cmd) {
                 case "A":
                     showAll();
                     break;
                 case "D":
-                    System.out.print("Enter a name or part of it: ");
                     deposits();
                     break;
                 case "P":
-                    System.out.print("Enter a department or part of it: ");
                     payments();
                     break;
                 case "R":
@@ -104,7 +136,7 @@ public class App {
                     back = true;
                     break;
                 default:
-                    System.out.println("Invalid command. Please choose 1-6.");
+                    System.out.println("Invalid command. Please try again.");
             }
         }
     }
@@ -132,15 +164,12 @@ public class App {
                     monthToDate(scanner);
                     break;
                 case "2":
-                    System.out.print("Enter a name or part of it: ");
                     previousMonth(scanner);
                     break;
                 case "3":
-                    System.out.print("Enter a department or part of it: ");
                     yearToDate(scanner);
                     break;
                 case "4":
-                    System.out.print("Enter SKU: ");
                     previousYear(scanner);
                     break;
                 case "5":
