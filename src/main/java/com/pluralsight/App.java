@@ -1,9 +1,12 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -76,7 +79,7 @@ public class App {
                         String description = tokens[2];
                         String vendor = tokens[3];
                         double amount = Double.parseDouble(tokens[4]);
-                        transactions.put(date, new Transaction(date, time, description, vendor, amount));
+                        transactions.put(time, new Transaction(date, time, description, vendor, amount));
                     }}
                 reader.close();
             }
@@ -85,7 +88,30 @@ public class App {
             }
         return transactions;
     }
-    public static void addDeposit(HashMap<String, Transaction> transactions, Scanner scanner) {}
+    public static void addDeposit(HashMap<String, Transaction> transactions, Scanner scanner) {
+        System.out.print("Enter Deposit Amount:");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Enter Vendor:");
+        String vendor = scanner.nextLine();
+
+        System.out.print("Enter a Description:");
+        String description = scanner.nextLine();
+
+        String date = String.valueOf(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String time = LocalTime.now().format(formatter);
+        try {
+            BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
+            bufWriter.newLine();
+            bufWriter.write(String.format("%s|%s|%s|%s|$%.2f%n", date, time, description, vendor, amount));
+            bufWriter.close(); //Saves file
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){}
     public static void showLedgerScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
         boolean back = false;
