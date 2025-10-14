@@ -27,10 +27,10 @@ public class App {
                 String cmd = scanner.nextLine().trim().toLowerCase();
 
                 if (cmd.equalsIgnoreCase("D")) {
-                    addDeposit(transactions, scanner);
+                    addDeposit(scanner);
 
                 } else if (cmd.equalsIgnoreCase("P")) {
-                    makePayment(scanner, transactions);
+                    makePayment(scanner);
 
                 } else if (cmd.equalsIgnoreCase("L")) {
                     showLedgerScreen(transactions,scanner);
@@ -88,7 +88,7 @@ public class App {
             }
         return transactions;
     }
-    public static void addDeposit(HashMap<String, Transaction> transactions, Scanner scanner) {
+    public static void addDeposit(Scanner scanner) {
         System.out.print("Enter Deposit Amount:");
         double amount = scanner.nextDouble();
         scanner.nextLine();
@@ -104,15 +104,13 @@ public class App {
         String time = LocalTime.now().format(formatter);
         try {
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
-            bufWriter.newLine();
-            bufWriter.write(String.format("%s|%s|%s|%s|$%.2f%n", date, time, description, vendor, amount));
+            bufWriter.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
             bufWriter.close(); //Saves file
         } catch(IOException e) {
             e.printStackTrace();
         }
-
     }
-    public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){
+    public static void makePayment(Scanner scanner){
         System.out.print("Enter Spent Amount:");
         double amount = scanner.nextDouble();
         scanner.nextLine();
@@ -128,8 +126,7 @@ public class App {
         String time = LocalTime.now().format(formatter);
         try {
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
-            bufWriter.newLine();
-            bufWriter.write(String.format("%s|%s|%s|%s|-$%.2f%n", date, time, description, vendor, amount));
+            bufWriter.write(String.format("%s|%s|%s|%s|-%.2f%n", date, time, description, vendor, amount));
             bufWriter.close(); //Saves file
         } catch(IOException e) {
             e.printStackTrace();
@@ -170,7 +167,7 @@ public class App {
                     showAll(transactions);
                     break;
                 case "D":
-                    deposits();
+//                    deposits(scanner);
                     break;
                 case "P":
                     payments();
@@ -193,7 +190,28 @@ public class App {
             displayTransaction(list);
         }
     }
-    public static void deposits(){}
+    public static HashMap<String, Transaction> deposits(Scanner scanner){
+//        HashMap<String,Transaction> transactions = new HashMap<>();
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
+//            String input;
+//            while ((input = reader.readLine())!=null) {
+//                String [] tokens = input.split("\\|");
+//                if (!tokens[4].contains("-")) {
+//                    String date  = tokens[0];
+//                    String time = tokens[1];
+//                    String description = tokens[2];
+//                    String vendor = tokens[3];
+//                    double amount = Double.parseDouble(tokens[4]);
+//                    transactions.put(time, new Transaction(date, time, description, vendor, amount));
+//                }}
+//            reader.close();
+//        }
+//        catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+        return null; // check
+    }
     public static void payments(){}
     public static void showReportsScreen(Scanner scanner) {
 
@@ -241,7 +259,7 @@ public class App {
     public static void previousYear(Scanner scanner) {}
     public static void searchbyVendor(Scanner scanner) {}
     public static void displayTransaction(Transaction t) {
-        System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: $%.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
+        System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: %.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
         );    }
 
 
