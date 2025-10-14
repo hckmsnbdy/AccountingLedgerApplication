@@ -133,6 +133,7 @@ public class App {
         }
     }
     public static void showLedgerScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
+
         boolean back = false;
         while (!back) {
             System.out.println();
@@ -167,13 +168,12 @@ public class App {
                     showAll(transactions);
                     break;
                 case "D":
-//                    deposits(scanner);
+                    displayDeposit(transactions);
                     break;
                 case "P":
-                    payments();
+                    displayPayments(transactions);
                     break;
                 case "R":
-                    System.out.print("Enter SKU: ");
                     showReportsScreen(scanner);
                     break;
                 case "0":
@@ -190,29 +190,6 @@ public class App {
             displayTransaction(list);
         }
     }
-    public static HashMap<String, Transaction> deposits(Scanner scanner){
-//        HashMap<String,Transaction> transactions = new HashMap<>();
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
-//            String input;
-//            while ((input = reader.readLine())!=null) {
-//                String [] tokens = input.split("\\|");
-//                if (!tokens[4].contains("-")) {
-//                    String date  = tokens[0];
-//                    String time = tokens[1];
-//                    String description = tokens[2];
-//                    String vendor = tokens[3];
-//                    double amount = Double.parseDouble(tokens[4]);
-//                    transactions.put(time, new Transaction(date, time, description, vendor, amount));
-//                }}
-//            reader.close();
-//        }
-//        catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-        return null; // check
-    }
-    public static void payments(){}
     public static void showReportsScreen(Scanner scanner) {
 
         boolean back = false;
@@ -261,10 +238,22 @@ public class App {
     public static void displayTransaction(Transaction t) {
         System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: %.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
         );    }
-
-
-
-
-
-
+    public static void displayDeposit(HashMap<String, Transaction> transactions) {
+        System.out.println();
+        System.out.println("=== DEPOSITS ===");
+        for (Transaction t : transactions.values()) {
+            if (t.getAmount() > 0) {
+                displayTransaction(t);
+            }
+        }
+    }
+    public static void displayPayments(HashMap<String, Transaction> transactions) {
+        System.out.println();
+        System.out.println("=== Payments ===");
+        for (Transaction t : transactions.values()) {
+            if (t.getAmount() < 0) {
+                displayTransaction(t);
+            }
+        }
+    }
 }
