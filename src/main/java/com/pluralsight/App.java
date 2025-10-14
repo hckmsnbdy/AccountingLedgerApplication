@@ -174,7 +174,7 @@ public class App {
                     displayPayments(transactions);
                     break;
                 case "R":
-                    showReportsScreen(scanner);
+                    showReportsScreen(transactions,scanner);
                     break;
                 case "0":
                     back = true;
@@ -190,7 +190,7 @@ public class App {
             displayTransaction(list);
         }
     }
-    public static void showReportsScreen(Scanner scanner) {
+    public static void showReportsScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
 
         boolean back = false;
         while (!back) {
@@ -220,7 +220,7 @@ public class App {
                     previousYear(scanner);
                     break;
                 case "5":
-                    searchbyVendor(scanner);
+                    searchbyVendor(transactions, scanner);
                     break;
                 case "0":
                     back = true;
@@ -230,11 +230,27 @@ public class App {
             }
         }
     }
-    public static void monthToDate(Scanner scanner) {}
-    public static void previousMonth(Scanner scanner) {}
-    public static void yearToDate(Scanner scanner) {}
-    public static void previousYear(Scanner scanner) {}
-    public static void searchbyVendor(Scanner scanner) {}
+    public static void monthToDate(Scanner scanner) {
+        System.out.println("");
+    }                                                                                    //
+    public static void previousMonth(Scanner scanner) {
+
+    }                                                                                    //
+    public static void yearToDate(Scanner scanner) {
+
+    }                                                                                    //
+    public static void previousYear(Scanner scanner) {
+
+    }                                 //
+    public static void searchbyVendor(HashMap<String,Transaction> transactions, Scanner scanner) {
+        System.out.print("Please enter Vendor:");
+        String vendor = scanner.nextLine();
+        for (Transaction t: transactions.values()){
+            if (t.getVendor().equals(vendor)){
+            displayTransaction(t);}
+        }
+
+    }                                                                                    //
     public static void displayTransaction(Transaction t) {
         System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: %.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
         );    }
