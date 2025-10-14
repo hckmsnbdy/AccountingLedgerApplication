@@ -112,7 +112,29 @@ public class App {
         }
 
     }
-    public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){}
+    public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions){
+        System.out.print("Enter Spent Amount:");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Enter Vendor:");
+        String vendor = scanner.nextLine();
+
+        System.out.print("Enter a Description:");
+        String description = scanner.nextLine();
+
+        String date = String.valueOf(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String time = LocalTime.now().format(formatter);
+        try {
+            BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
+            bufWriter.newLine();
+            bufWriter.write(String.format("%s|%s|%s|%s|-$%.2f%n", date, time, description, vendor, amount));
+            bufWriter.close(); //Saves file
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void showLedgerScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
         boolean back = false;
         while (!back) {
