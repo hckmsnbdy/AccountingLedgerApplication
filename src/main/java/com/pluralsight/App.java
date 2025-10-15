@@ -4,8 +4,10 @@ import java.io.*;
 // For formatting times (HH:mm:ss)
 import java.time.format.DateTimeFormatter;
 // HashMap for in-memory transaction storage
+import java.util.ArrayList;
 import java.util.HashMap;
 // Scanner for console input
+import java.util.List;
 import java.util.Scanner;
 // LocalDate/LocalTime for dates and times
 import java.time.LocalDate;
@@ -215,7 +217,7 @@ public class App {
     public static void showAll(HashMap<String, Transaction> transactions) {
         // Iteration over the map’s values
         System.out.println();
-        for (Transaction list : transactions.values()) {
+        for (Transaction list : sortDescByDateTime(transactions)) {
             // Use a common printer so the format stays consistent
             displayTransaction(list);
         }
@@ -274,7 +276,7 @@ public class App {
         int currentMonth = Integer.parseInt(currentDate[1]);
 
         // Iterate through all transactions and filter by current month/year
-        for (Transaction t: transactions.values()){
+        for (Transaction t: sortDescByDateTime(transactions)){
             try {
                 // Take the date from the transaction
                 String transactionDate = t.getDate();
@@ -301,7 +303,7 @@ public class App {
         int targetMonth = prev.getMonthValue();
 
         // Loop through the in-memory transactions, filter by target year and target month
-        for (Transaction t : transactions.values()) {
+        for (Transaction t : sortDescByDateTime(transactions)) {
             try {
                 String transactionDate = t.getDate();
                 // Split
@@ -326,7 +328,7 @@ public class App {
         int currentDay   = Integer.parseInt(todayParts[2]);
 
         // Include all records from Jan 1 to today of the same year
-        for (Transaction t : transactions.values()) {
+        for (Transaction t : sortDescByDateTime(transactions)) {
             try {
                 String[] parts = t.getDate().split("-");
                 int year = Integer.parseInt(parts[0]);
@@ -354,7 +356,7 @@ public class App {
         int targetYear    = currentYear - 1;
 
         // Loop over in-memory transactions, include all records whose year equals targetYear
-        for (Transaction t : transactions.values()) {
+        for (Transaction t : sortDescByDateTime(transactions)) {
             try {
                 String[] parts = t.getDate().split("-");
                 int year = Integer.parseInt(parts[0]);
@@ -375,7 +377,7 @@ public class App {
         System.out.print("Please enter Vendor:");
         String vendor = scanner.nextLine();
         // Scan all records and print exact matches
-        for (Transaction t: transactions.values()){
+        for (Transaction t: sortDescByDateTime(transactions)) {
             if (t.getVendor().equals(vendor)){
             displayTransaction(t);}
         }
@@ -389,7 +391,7 @@ public class App {
         // Print only deposits (positive amounts)
         System.out.println();
         System.out.println("=== DEPOSITS ===");
-        for (Transaction t : transactions.values()) {
+        for (Transaction t : sortDescByDateTime(transactions)) {
             if (t.getAmount() > 0) {
                 displayTransaction(t);
             }
@@ -399,10 +401,49 @@ public class App {
         // Print only payments (negative amounts)
         System.out.println();
         System.out.println("=== Payments ===");
-        for (Transaction t : transactions.values()) {
+        for (Transaction t : sortDescByDateTime(transactions)) {
             if (t.getAmount() < 0) {
                 displayTransaction(t);
             }
         }
     }
+    private static List<Transaction> sortDescByDateTime(HashMap<String, Transaction> transactions) {
+        // Returns a NEW list of transactions sorted by date desc, then time desc.
+
+        // Copy map values into a list
+        List<Transaction> list = new ArrayList<>(transactions.values());
+
+        // Simple bubble sort (newest first)
+        int n = list.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1 - i; j++) {
+                Transaction a = list.get(j);
+                Transaction b = list.get(j + 1);
+
+                // Compare date strings larger means newer
+                int byDate = b.getDate().compareTo(a.getDate());
+                boolean shouldSwap;
+
+                if (byDate > 0) {
+                    // b has newer date → place b before a
+                    shouldSwap = true;
+                } else if (byDate < 0) {
+                    // a has newer date → keep order
+                    shouldSwap = false;
+                } else {
+                    // Same date – compare time
+                    int byTime = b.getTime().compareTo(a.getTime());
+                    shouldSwap = (byTime > 0); // newer time first
+                }
+
+                if (shouldSwap) {
+                    // swap a and b
+                    list.set(j, b);
+                    list.set(j + 1, a);
+                }
+            }
+        }
+        return list;
+    }
+
 }
