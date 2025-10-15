@@ -27,13 +27,13 @@ public class App {
                 String cmd = scanner.nextLine().trim().toLowerCase();
 
                 if (cmd.equalsIgnoreCase("D")) {
-                    addDeposit(scanner);
+                    addDeposit(scanner, transactions);
 
                 } else if (cmd.equalsIgnoreCase("P")) {
-                    makePayment(scanner);
+                    makePayment(scanner, transactions);
 
                 } else if (cmd.equalsIgnoreCase("L")) {
-                    showLedgerScreen(transactions,scanner);
+                    showLedgerScreen(transactions, scanner);
 
                 } else if (cmd.equalsIgnoreCase("X")) {
                     running = false;
@@ -61,34 +61,35 @@ public class App {
 //                        System.out.println("Invalid command. Please try again.");
 //                }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
     public static HashMap<String, Transaction> loadTransactions() {
-        HashMap<String,Transaction> transactions = new HashMap<>();
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
-                String input;
-                while ((input = reader.readLine())!=null) {
-                String [] tokens = input.split("\\|");
-                    if (!tokens[0].equals("date")) {
-                        String date  = tokens[0];
-                        String time = tokens[1];
-                        String description = tokens[2];
-                        String vendor = tokens[3];
-                        double amount = Double.parseDouble(tokens[4]);
-                        transactions.put(time, new Transaction(date, time, description, vendor, amount));
-                    }}
-                reader.close();
+        HashMap<String, Transaction> transactions = new HashMap<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
+            String input;
+            while ((input = reader.readLine()) != null) {
+                String[] tokens = input.split("\\|");
+                if (!tokens[0].equals("date")) {
+                    String date = tokens[0];
+                    String time = tokens[1];
+                    String description = tokens[2];
+                    String vendor = tokens[3];
+                    double amount = Double.parseDouble(tokens[4]);
+                    transactions.put(time, new Transaction(date, time, description, vendor, amount));
+                }
             }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return transactions;
     }
-    public static void addDeposit(Scanner scanner) {
+
+    public static void addDeposit(Scanner scanner, HashMap<String, Transaction> transactions) {
         System.out.print("Enter Deposit Amount:");
         double amount = scanner.nextDouble();
         scanner.nextLine();
@@ -106,11 +107,12 @@ public class App {
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
             bufWriter.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
             bufWriter.close(); //Saves file
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static void makePayment(Scanner scanner){
+
+    public static void makePayment(Scanner scanner, HashMap<String, Transaction> transactions) {
         System.out.print("Enter Spent Amount:");
         double amount = scanner.nextDouble();
         scanner.nextLine();
@@ -128,11 +130,12 @@ public class App {
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true));
             bufWriter.write(String.format("%s|%s|%s|%s|-%.2f%n", date, time, description, vendor, amount));
             bufWriter.close(); //Saves file
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static void showLedgerScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
+
+    public static void showLedgerScreen(HashMap<String, Transaction> transactions, Scanner scanner) {
 
         boolean back = false;
         while (!back) {
@@ -142,7 +145,7 @@ public class App {
             System.out.println("D) Deposits");
             System.out.println("P) Payments");
             System.out.println("R) Reports");
-            System.out.println("O) Home");
+            System.out.println("0) Home");
             System.out.print("Enter command: ");
 
             String cmd = scanner.nextLine().toUpperCase().trim();
@@ -174,7 +177,7 @@ public class App {
                     displayPayments(transactions);
                     break;
                 case "R":
-                    showReportsScreen(transactions,scanner);
+                    showReportsScreen(transactions, scanner);
                     break;
                 case "0":
                     back = true;
@@ -184,13 +187,15 @@ public class App {
             }
         }
     }
+
     public static void showAll(HashMap<String, Transaction> transactions) {
         System.out.println();
-        for (Transaction list : transactions.values()){
+        for (Transaction list : transactions.values()) {
             displayTransaction(list);
         }
     }
-    public static void showReportsScreen(HashMap<String, Transaction> transactions,Scanner scanner) {
+
+    public static void showReportsScreen(HashMap<String, Transaction> transactions, Scanner scanner) {
 
         boolean back = false;
         while (!back) {
@@ -208,7 +213,7 @@ public class App {
 
             switch (cmd) {
                 case "1":
-//                    monthToDate(scanner);
+                    monthToDate(transactions);
                     break;
                 case "2":
                     previousMonth(scanner);
@@ -230,40 +235,31 @@ public class App {
             }
         }
     }
-    public static void monthToDate(HashMap<String,Transaction> transactions) {
-//        for (Transaction t: transactions.values()){
-//
-//            String[] currentDate = String.valueOf(LocalDate.now()).split("\\-");
-//            int mm = Integer.parseInt(currentDate[1]);
-//            try {
-//                BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
-//                String input;
-//                while ((input = reader.readLine())!=null) {
-//                    String [] tokens = input.split("\\|");
-//                    if (!tokens[0].equals("date")) {
-//                        String date  = tokens[0];
-//                        String time = tokens[1];
-//                        String description = tokens[2];
-//                        String vendor = tokens[3];
-//                        double amount = Double.parseDouble(tokens[4]);
-//
-//                        String[] dayTokens = date.split("\\:");
-//                        int dd =Integer.parseInt(dayTokens[2]);
-//                        if (dd < 31 ){
-//{
-//                        transactions.put(time, new Transaction(date, time, description, vendor, amount));
-//                    }}}}
-//                reader.close();
-//            }
-//            catch (Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-//            return transactions;
-//
-////            if (t.getDate().equals(currentDate)){
-////                displayTransaction(t);}
-////        }
-    }                                                                                    //
+
+    public static void monthToDate(HashMap<String, Transaction> transactions) {
+        // Get today's year and month using split()
+        String[] currentDate = String.valueOf(LocalDate.now()).split("-");
+        int currentYear  = Integer.parseInt(currentDate[0]);
+        int currentMonth = Integer.parseInt(currentDate[1]);
+        for (Transaction t: transactions.values()){
+            try {
+                // Take the date from the transaction
+                String transactionDate = t.getDate();
+                // Split
+                String[] dateParts = transactionDate.split("-");
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+
+                // Keep only transactions in the same YEAR and MONTH as today
+                if (year == currentYear && month == currentMonth) {
+                    displayTransaction(t);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
     public static void previousMonth(Scanner scanner) {
 
     }                                                                                    //
