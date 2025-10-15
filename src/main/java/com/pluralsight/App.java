@@ -216,7 +216,7 @@ public class App {
                     monthToDate(transactions);
                     break;
                 case "2":
-                    previousMonth(scanner);
+                    previousMonth(transactions);
                     break;
                 case "3":
                     yearToDate(scanner);
@@ -260,8 +260,30 @@ public class App {
             }
         }
     }
-    public static void previousMonth(Scanner scanner) {
+    public static void previousMonth(HashMap<String, Transaction> transactions) {
+        // Find the previous month and year
+        LocalDate today = LocalDate.now();
+        LocalDate prev  = today.minusMonths(1); //
+        int targetYear  = prev.getYear();
+        int targetMonth = prev.getMonthValue();
 
+        // Loop through the in-memory transactions
+        for (Transaction t : transactions.values()) {
+            try {
+                String transactionDate = t.getDate();
+                // Split
+                String[] dateParts = transactionDate.split("-");
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+                // Keep only those in previous month
+                if (year == targetYear && month == targetMonth) {
+                    displayTransaction(t);
+                }
+            }
+                catch (Exception e) {
+                System.out.println(e.getMessage());
+                }
+            }
     }                                                                                    //
     public static void yearToDate(Scanner scanner) {
 
