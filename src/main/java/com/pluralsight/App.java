@@ -181,7 +181,7 @@ public class App {
             System.out.println("D) Deposits");
             System.out.println("P) Payments");
             System.out.println("R) Reports");
-            System.out.println("0) Home");
+            System.out.println("H) Home");
             System.out.print("Enter command: ");
 
             // Read command for the ledger section
@@ -205,7 +205,7 @@ public class App {
                     // Open reports sub-menu (MTD, Prev Month, YTD, Prev Year, Search)
                     showReportsScreen(transactions, scanner);
                     break;
-                case "0":
+                case "H":
                     // Return to the home screen
                     back = true;
                     break;
