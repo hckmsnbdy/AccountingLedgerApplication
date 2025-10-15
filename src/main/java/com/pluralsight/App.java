@@ -222,7 +222,7 @@ public class App {
                     yearToDate(transactions);
                     break;
                 case "4":
-                    previousYear(scanner);
+                    previousYear(transactions);
                     break;
                 case "5":
                     searchbyVendor(transactions, scanner);
@@ -283,7 +283,7 @@ public class App {
                 System.out.println(e.getMessage());
                 }
             }
-    }                                                                                    //
+    }
     public static void yearToDate(HashMap<String, Transaction> transactions) {
         // Today parts
         String[] todayParts = String.valueOf(LocalDate.now()).split("-"); // ["2025","10","15"]
@@ -310,10 +310,31 @@ public class App {
                 System.out.println(e.getMessage());
             }
         }
-    }                                                                                    //
-    public static void previousYear(Scanner scanner) {
+    }
+    public static void previousYear(HashMap<String, Transaction> transactions) {
 
-    }                                 //
+        // Determine the target year (previous year)
+        String[] todayParts = String.valueOf(LocalDate.now()).split("-");
+        int currentYear   = Integer.parseInt(todayParts[0]);
+        int targetYear    = currentYear - 1;
+
+        // Loop over in-memory transactions
+        for (Transaction t : transactions.values()) {
+            try {
+                String[] parts = t.getDate().split("-");
+                int year = Integer.parseInt(parts[0]);
+
+                // Keep only records from previous year
+                if (year == targetYear) {
+                    displayTransaction(t);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
     public static void searchbyVendor(HashMap<String,Transaction> transactions, Scanner scanner) {
         System.out.print("Please enter Vendor:");
         String vendor = scanner.nextLine();
@@ -322,7 +343,7 @@ public class App {
             displayTransaction(t);}
         }
 
-    }                                                                                    //
+    }
     public static void displayTransaction(Transaction t) {
         System.out.printf("Date: %s | Time: %s | Description: %s | Vendor: %s | Amount: %.2f%n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount()
         );    }
