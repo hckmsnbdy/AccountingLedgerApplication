@@ -219,7 +219,7 @@ public class App {
                     previousMonth(transactions);
                     break;
                 case "3":
-                    yearToDate(scanner);
+                    yearToDate(transactions);
                     break;
                 case "4":
                     previousYear(scanner);
@@ -235,7 +235,6 @@ public class App {
             }
         }
     }
-
     public static void monthToDate(HashMap<String, Transaction> transactions) {
         // Get today's year and month using split()
         String[] currentDate = String.valueOf(LocalDate.now()).split("-");
@@ -285,8 +284,32 @@ public class App {
                 }
             }
     }                                                                                    //
-    public static void yearToDate(Scanner scanner) {
+    public static void yearToDate(HashMap<String, Transaction> transactions) {
+        // Today parts
+        String[] todayParts = String.valueOf(LocalDate.now()).split("-"); // ["2025","10","15"]
+        int currentYear  = Integer.parseInt(todayParts[0]);
+        int currentMonth = Integer.parseInt(todayParts[1]);
+        int currentDay   = Integer.parseInt(todayParts[2]);
 
+        for (Transaction t : transactions.values()) {
+            try {
+                String[] parts = t.getDate().split("-");
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                int day = Integer.parseInt(parts[2]);
+
+                // 3) Keep only: same year AND (date <= today)
+                // Compare (m,d) with (curMonth,curDay) lexicographically
+                boolean sameYear = (year == currentYear);
+                boolean beforeOrEqualToday = (month <currentMonth) || (month == currentMonth && day <= currentDay);
+                if (sameYear && beforeOrEqualToday) {
+                    displayTransaction(t);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }                                                                                    //
     public static void previousYear(Scanner scanner) {
 
