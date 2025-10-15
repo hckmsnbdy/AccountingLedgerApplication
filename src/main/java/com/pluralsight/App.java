@@ -208,7 +208,7 @@ public class App {
 
             switch (cmd) {
                 case "1":
-                    monthToDate(scanner);
+//                    monthToDate(scanner);
                     break;
                 case "2":
                     previousMonth(scanner);
@@ -230,8 +230,39 @@ public class App {
             }
         }
     }
-    public static void monthToDate(Scanner scanner) {
-        System.out.println("");
+    public static void monthToDate(HashMap<String,Transaction> transactions) {
+//        for (Transaction t: transactions.values()){
+//
+//            String[] currentDate = String.valueOf(LocalDate.now()).split("\\-");
+//            int mm = Integer.parseInt(currentDate[1]);
+//            try {
+//                BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
+//                String input;
+//                while ((input = reader.readLine())!=null) {
+//                    String [] tokens = input.split("\\|");
+//                    if (!tokens[0].equals("date")) {
+//                        String date  = tokens[0];
+//                        String time = tokens[1];
+//                        String description = tokens[2];
+//                        String vendor = tokens[3];
+//                        double amount = Double.parseDouble(tokens[4]);
+//
+//                        String[] dayTokens = date.split("\\:");
+//                        int dd =Integer.parseInt(dayTokens[2]);
+//                        if (dd < 31 ){
+//{
+//                        transactions.put(time, new Transaction(date, time, description, vendor, amount));
+//                    }}}}
+//                reader.close();
+//            }
+//            catch (Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+//            return transactions;
+//
+////            if (t.getDate().equals(currentDate)){
+////                displayTransaction(t);}
+////        }
     }                                                                                    //
     public static void previousMonth(Scanner scanner) {
 
